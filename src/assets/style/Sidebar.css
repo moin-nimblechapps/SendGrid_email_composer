@@ -1,0 +1,26 @@
+ul{
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar{
+    min-height: 800px;
+    padding: 0px 10px;
+}
+
+ul li a:hover{
+    cursor: pointer;
+}
+
+body .sidebar p{
+    color:  black;
+    padding: 10px 0px;
+    border-bottom: 1px solid black;
+    font-size: 1rem;
+}
+
+.sidebar .newEmail{
+    background-color: #0c6efd;
+    color: white;
+    border-radius: 10px;
+}

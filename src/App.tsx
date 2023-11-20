@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Inbox from './components/Inbox';
+import EmailComponent from './components/emailComponent';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js'
+import 'bootstrap-icons/font/bootstrap-icons.css'
+import Started from './components/Started';
+import Sent from './components/Sent';
+import Trash from './components/Trash';
+import Important from './components/Impotant';
+import Newemail from './components/Newemail';
 
-function App() {
+
+const App = () => {
+
+ 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    // <EmailComponent />
+    <Router>
+      <div className="container my-5 emailComponent">
+        <div className="row">
+          <div className="col-md-3">
+            <EmailComponent />
+          </div>
+          <div className="col-md-9">
+            <Routes>
+              <Route path="/" element={<Inbox />} />
+              <Route path='/newEmail' element={<Newemail />}/>
+              <Route path='/stared' element={<Started />}/>
+              <Route path='/sent' element={<Sent />}/>
+              <Route path='/trash' element={<Trash onClick={() => alert("Okay")} text='Hello' id={2}/>}/>
+              <Route path='/important' element={<Important />}/>              {/* Add more routes as needed */}
+            </Routes>
+          </div>
+        </div>
+      </div>
+    </Router>
   );
-}
+};
+
 
 export default App;
