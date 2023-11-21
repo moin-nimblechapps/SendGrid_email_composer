@@ -8,7 +8,7 @@ const emailComponent: React.FC = () => {
         <div className="container">
             <div className="">
                 <div className=" bg-light py-4 d-flex flex-column text-center sidebar">
-                    <Link to='/newEmail'><p className="newEmail">New Email</p></Link>
+                    <Link to='/NewemailComponent'><p className="newEmail">New Email</p></Link>
                     <Link to='/'><p className="inbox">Inbox</p></Link>
                     <Link to='/stared'><p>Started</p></Link> 
                     <Link to='/sent'><p>Sent</p></Link> 
