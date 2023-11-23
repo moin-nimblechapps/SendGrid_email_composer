@@ -1,92 +1,129 @@
-import JoditEditor from "jodit-react";
-import { useRef, useState } from "react";
+
+import ReactQuill, {Quill} from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import axios from "axios";
-import { ToastContainer,toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css'
+import '../../assets/style/Sidebar.css';
+import { useForm } from 'react-hook-form'
+import { useEffect } from 'react';
+import { Oval } from 'react-loader-spinner'
+import '../../assets/style/Sidebar.css'
 
-const NewemailComponent = () => {
+// interface NewemailProps {
+//   sendMessage: () => void;
+//   recipient: string;
+//   subject: string;
+//   setSubject: string;
+//   content: string;
+//   setContent: string;
+//   Isbutton: boolean;
+//   loader: boolean;
+//   onSetSubject: (e: React.ChangeEvent<HTMLInputElement>) => void; 
+//   onSetRecipient: (e: React.ChangeEvent<HTMLInputElement>) => void;
+// }
 
-  const editor = useRef(null);
-  let [recipient, setRecipient] = useState<string>('')
-  let [subject, setSubject] = useState<string>('')
-  let [content, setContent] = useState<string>('');
-  // let Isbutton = true;
-  let Isbutton = () => {
-    if (recipient.length > 0 && subject.length > 0 && content.length > 0  ) {
-      console.log("Isbutton in IF===>", Isbutton);
-        return true;
-    }
-    console.log("Isbutton in else===>", Isbutton);
-    return false;
+const NewemailComponent = (props: any) => {
+
+
+  const {
+    register, handleSubmit,
+    formState: { errors },
+    setValue,
+    watch
+  } = useForm();
+
+  const { sendMessage,
+    recipient,
+    subject,
+    onSetSubject,
+    content,
+    onSetRecipient,
+    Isbutton,
+    setContent,
+  } = props;
+
+  let modules = {
+    
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['blockquote', 'code-block'],
+    
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'direction': 'rtl' }],                         // text direction
+    
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+    
+      ['clean'] ,
+    ],
+    clipboard: {
+      // toggle to add extra line breaks when pasting HTML:
+      matchVisual: false
+    },
   }
 
-  async function sendMessage(e: React.FormEvent) {
-    e.preventDefault();
-    console.log("Enter a sendMessage function");
+  useEffect(() => {
+    register("content", { required: true });
+  }, [register]);
 
-    if (recipient.length > 0 && subject.length > 0 && content.length > 0) {
-      console.log(`Inside IF setRecipient is: ${recipient} and Subject of mail is: ${subject} body of mail is: ${content}`);
-      try {
-        var body = {
-          "toAddress": recipient,
-          "subject": subject,
-          "message": content
-        };
+  const contentValue = watch('content');
 
-       try {
-        const response = await axios.post("http://localhost:5000/send", body);
-        if (response.status === 200) {
-          console.log("Email sent success")
-            toast.success("Email sent success", {
-              position: toast.POSITION.TOP_RIGHT
-            });
-            setRecipient('');
-            setSubject('');
-            setContent('');
-        }
-        else{
-          toast.error(response.data.message);
-        }
-       
-       } catch (error) {
-        console.log("Error creating Post===>", error)
-       }
+  const setBodyContent = (content: string) => {
+    setContent(content);
+    setValue('content', content); // Set value of 'content' field
+  };
 
-      } catch (error) {
-        console.error('Error sending email:', error);
-      }
-    }
-    else {
-      console.log("Something went wrong");
-      console.log(`Inside else setRecipient is: ${recipient} and Subject of mail is: ${subject} body of mail is: ${content}`);
-    }
-
-  }
-
+  // console.log("Enter mail container", props);
   return (
     <>
-      <form className="pt-5" onSubmit={sendMessage} name='Email-form'>
-        <div className="mb-3">
-          <h4 className="me-4">To: </h4>
-          <input type="email" className="form-control" required={true} id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" onChange={(e) => setRecipient(e.target.value)} />
-        </div>
-        <div className="mb-3">
-          <h4 className="me-4">Subject: </h4>
-          <input type="text" className="form-control" required={true} placeholder="Enter Subject" onChange={(e) => setSubject(e.target.value)} />
-        </div>
-        <div className="mb-3">
-          <textarea className="form-control" required={true} id="exampleFormControlTextarea1" rows={10} placeholder="Enter body" spellCheck={true} onChange={(e) => setContent(e.target.value)} />
-          {/* <JoditEditor ref={editor} value={content} onChange={newContent => setContent(newContent)} /> */}
-        </div>
-        <div className="text-center">
-          <button type="submit" className={Isbutton() ? "btn btn-primary" : 'btn btn-secondary disabled'}>Submit</button>
-        </div>
-      </form>
+      
+          <form className="pt-5" onSubmit={handleSubmit(sendMessage)}>
+            <div className="mb-3">
+              <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
+              <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                {...register("recipient", {
+                  required: true,
+                  pattern: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i,
+                })}
+                value={recipient}
+                onChange={onSetRecipient}
+              />
+              <div style={{ color: 'red' }}>
+                {errors.recipient?.type === "required" && "Name is required"}
+                {errors.recipient?.type === 'pattern' && "Enter valid email "}
+              </div>
 
-
+            </div>
+            <div className="mb-3">
+              <label htmlFor="exampleInputEmail1" className="form-label">Subject</label>
+              <input type="text" className="form-control"  aria-describedby="textHelp"
+                {...register("subject", { required: true })}
+                value={subject}
+                onChange={onSetSubject}
+              />
+              <div style={{ color: 'red' }}>
+                {errors.subject?.type === "required" && "subject is required"}
+              </div>
+            </div>
+            <div className="mb-3 editor-container">
+              <ReactQuill theme="snow" modules={modules}
+                className="editor"
+                value={content}
+                onChange={setBodyContent}
+              />
+            </div>
+            <div style={{ color: 'red' }}>
+              {errors.content && "Email Body required"}
+            </div>
+            <div className="my-2 text-center">
+              <button type="submit" className={Isbutton ? "btn btn-primary" : "btn btn-secondary disabled"}>Submit</button>
+            </div>
+          </form>
+      
     </>
   )
 }
 
 export default NewemailComponent;
+

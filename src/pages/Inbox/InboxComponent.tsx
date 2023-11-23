@@ -8,27 +8,15 @@ interface Todo {
   }
   
   interface InboxProps {
-    todos: Todo[];
+    list: string;
   }
 
   const InboxComponent: React.FC<InboxProps> = (props) => {
-    const {todos} =props;
-    const configValue = process.env.REACT_APP_SENDGRID_API_KEY;
-    console.log(configValue)
+    const {list} = props;
     return (
         <>
             <div className="">
-                {
-                    todos.map((todo) => (
-                        <>
-                        <div key={process.env.SENDGRID_API_KEY}>
-                        <li>{process.env.PUBLIC_URL}</li>
-                        <li>{todo.id}</li>
-                        <li>{todo.title}</li>
-                        </div>
-                        </>
-                    ))
-                }
+                <h1 className="text-center">{props.list}</h1>
             </div>
         </>
     )

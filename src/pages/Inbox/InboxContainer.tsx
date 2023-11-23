@@ -11,25 +11,12 @@ interface TodoData {
 }
 
 const InboxContainer: React.FC = () => {
-    const[todos,setTodo] = useState<TodoData[]>([])
-    const fetchTodos: string = process.env.REACT_APP_FETCH_TODOS;
-    console.log(fetchTodos);
-    useEffect(() => {
-    console.log("From useEffetc ",typeof fetchTodos);
 
-    console.log("From useEffetc ", fetchTodos);
-    fetch(fetchTodos)
-        .then((response) => response.json())
-        .then((data) => setTodo(data as TodoData[]))
-        .catch((error) => console.log("error===>", error))
-    }, [])
-
+    let List: string = "List of Mails";
 
     return (
         <>
-           <InboxComponent
-            todos={todos as any}
-            />
+           <InboxComponent list = {List}/>
         </>
     )
 }

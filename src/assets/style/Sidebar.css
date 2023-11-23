@@ -24,3 +24,20 @@ body .sidebar p{
     color: white;
     border-radius: 10px;
 }
+
+.ql-editor{
+    min-height:450px;
+}
+
+@media only screen and (max-width: 768px){
+    .sidebar{
+        min-height: max-content;
+    }
+}
+
+.ovalLoader{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
